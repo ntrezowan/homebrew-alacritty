@@ -1,4 +1,4 @@
-name: Update Alacritty
+name: Update Alacritty Custom
 
 on:
   schedule:
@@ -28,15 +28,15 @@ jobs:
 
       - name: Update Cask file
         run: |
-          ruby -pi -e 'sub(/version ".*"/, "version \"${{ steps.release.outputs.version }}\"")' casks/alacritty.rb
-          ruby -pi -e 'sub(/sha256 ".*"/, "sha256 \"${{ steps.sha.outputs.sha }}\"")' casks/alacritty.rb
+          ruby -pi -e 'sub(/version ".*"/, "version \"${{ steps.release.outputs.version }}\"")' casks/alacritty-custom.rb
+          ruby -pi -e 'sub(/sha256 ".*"/, "sha256 \"${{ steps.sha.outputs.sha }}\"")' casks/alacritty-custom.rb
 
       - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add casks/alacritty.rb
-          git commit -m "Update Alacritty to ${{ steps.release.outputs.version }}" || echo "No changes"
+          git add casks/alacritty-custom.rb
+          git commit -m "Update Alacritty Custom to ${{ steps.release.outputs.version }}" || echo "No changes"
 
       - name: Pull latest from remote
         run: git pull --rebase
@@ -44,16 +44,16 @@ jobs:
       - name: Push changes
         run: git push
 
-      - name: Create release tag (vX.Y.Z-tap)
+      - name: Create release tag (vX.Y.Z-custom)
         env:
           VERSION: ${{ steps.release.outputs.version }}
         run: |
-          if git tag | grep -qx "v$VERSION-tap"; then
-            echo "Tag v$VERSION-tap already exists."
+          if git tag | grep -qx "v$VERSION-custom"; then
+            echo "Tag v$VERSION-custom already exists."
           else
-            git tag -a "v$VERSION-tap" -m "Cask for Alacritty $VERSION"
-            git push origin "v$VERSION-tap"
-            echo "Tagged and pushed v$VERSION-tap."
+            git tag -a "v$VERSION-custom" -m "Cask for Alacritty Custom $VERSION"
+            git push origin "v$VERSION-custom"
+            echo "Tagged and pushed v$VERSION-custom."
           fi
 
       - name: Create GitHub Release (pro move!)
@@ -61,10 +61,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.release.outputs.version }}
         run: |
-          TAG="v$VERSION-tap"
+          TAG="v$VERSION-custom"
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release $TAG already exists."
           else
-            gh release create "$TAG" --title "Alacritty $VERSION (tap auto-release)" --notes "Automated Homebrew cask release for Alacritty $VERSION."
+            gh release create "$TAG" --title "Alacritty $VERSION (custom tap auto-release)" --notes "Automated Homebrew cask release for Alacritty $VERSION (custom)."
             echo "Created GitHub release $TAG"
           fi
