@@ -54,6 +54,3 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
 - **No conflicts:** The unique cask name `alacritty-custom` ensures your installation won’t be overridden by the official Homebrew cask.
 
 ---
-
-**Brutal reality:**  
-If you do not use exactly `alacritty-custom` in all your install/upgrade/uninstall instructions, users *will* get errors, and this README will be out of date. If you ever change the cask token, update every example here immediately.
