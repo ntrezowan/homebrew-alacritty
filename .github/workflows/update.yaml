@@ -16,10 +16,24 @@ jobs:
       - name: Fetch latest release
         id: release
         run: |
-          VERSION=$(curl -s https://api.github.com/repos/alacritty/alacritty/releases/latest | jq -r '.tag_name' | sed 's/v//')
+          VERSION=$(curl -s https://api.github.com/repos/alacritty/alacritty/releases/latest | jq -r '.tag_name' | sed 's/^v//')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Check if release already exists
+        id: exists
+        run: |
+          if git tag | grep -qx "${{ steps.release.outputs.version }}"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if latest release already exists
+        if: steps.exists.outputs.exists == 'true'
+        run: echo "Latest release/tag already exists, stopping workflow."
+
       - name: Download DMG and compute SHA256
+        if: steps.exists.outputs.exists != 'true'
         id: sha
         run: |
           curl -L -o alacritty.dmg "https://github.com/alacritty/alacritty/releases/download/v${{ steps.release.outputs.version }}/Alacritty-v${{ steps.release.outputs.version }}.dmg"
@@ -27,11 +41,13 @@ jobs:
           echo "sha=$SHA256" >> $GITHUB_OUTPUT
 
       - name: Update Cask file
+        if: steps.exists.outputs.exists != 'true'
         run: |
           ruby -pi -e 'sub(/version ".*"/, "version \"${{ steps.release.outputs.version }}\"")' casks/alacritty-custom.rb
           ruby -pi -e 'sub(/sha256 ".*"/, "sha256 \"${{ steps.sha.outputs.sha }}\"")' casks/alacritty-custom.rb
 
       - name: Commit changes
+        if: steps.exists.outputs.exists != 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -39,32 +55,27 @@ jobs:
           git commit -m "Update Alacritty Custom to ${{ steps.release.outputs.version }}" || echo "No changes"
 
       - name: Pull latest from remote
+        if: steps.exists.outputs.exists != 'true'
         run: git pull --rebase
 
       - name: Push changes
+        if: steps.exists.outputs.exists != 'true'
         run: git push
 
-      - name: Create release tag (vX.Y.Z-custom)
+      - name: Create release tag
+        if: steps.exists.outputs.exists != 'true'
         env:
           VERSION: ${{ steps.release.outputs.version }}
         run: |
-          if git tag | grep -qx "v$VERSION-custom"; then
-            echo "Tag v$VERSION-custom already exists."
-          else
-            git tag -a "v$VERSION-custom" -m "Cask for Alacritty Custom $VERSION"
-            git push origin "v$VERSION-custom"
-            echo "Tagged and pushed v$VERSION-custom."
-          fi
+          git tag -a "$VERSION" -m "Cask for Alacritty Custom $VERSION"
+          git push origin "$VERSION"
+          echo "Tagged and pushed $VERSION."
 
       - name: Create GitHub Release
+        if: steps.exists.outputs.exists != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.release.outputs.version }}
         run: |
-          TAG="v$VERSION-custom"
-          if gh release view "$TAG" > /dev/null 2>&1; then
-            echo "Release $TAG already exists."
-          else
-            gh release create "$TAG" --title "$VERSION" --notes "Automated Homebrew cask release for Alacritty $VERSION (custom)."
-            echo "Created GitHub release $TAG"
-          fi
+          gh release create "$VERSION" --title "$VERSION" --notes "Automated Homebrew cask release for Alacritty $VERSION (custom)."
+          echo "Created GitHub release $VERSION"
