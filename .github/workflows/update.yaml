@@ -65,6 +65,6 @@ jobs:
           if gh release view "$TAG" > /dev/null 2>&1; then
             echo "Release $TAG already exists."
           else
-            gh release create "$TAG" --title "$VERSION (custom)" --notes "Automated Homebrew cask release for Alacritty $VERSION (custom)."
+            gh release create "$TAG" --title "$VERSION" --notes "Automated Homebrew cask release for Alacritty $VERSION (custom)."
             echo "Created GitHub release $TAG"
           fi
