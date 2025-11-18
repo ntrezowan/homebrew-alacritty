@@ -19,14 +19,6 @@ This tap **does not cover vulnerabilities in Alacritty itself**. Please report t
 
 ---
 
-## Response
-
-- All valid reports will be acknowledged within **7 days**.
-- If a security fix is needed, it will be released via an updated cask or SHA256 correction.
-- Users are advised to always verify downloaded binaries before installation.
-
----
-
 ## Recommendations for Users
 
 1. Always check the SHA256 of the downloaded `.dmg`:
