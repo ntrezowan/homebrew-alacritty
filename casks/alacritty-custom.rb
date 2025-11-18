@@ -7,13 +7,8 @@ cask "alacritty-custom" do
   desc "GPU-accelerated terminal emulator"
   homepage "https://github.com/alacritty/alacritty"
 
-  # Apple Silicon only: uncomment the next line for strict arm restriction
-  # depends_on macos: :arm64
-
   app "Alacritty.app"
 
-  # Optionally, install completions and terminfo just like the official cask
-  # You can remove this whole block if not wanted; included for feature parity.
   postflight do
     bash_completion = "#{appdir}/Alacritty.app/Contents/Resources/completions/alacritty.bash"
     fish_completion = "#{appdir}/Alacritty.app/Contents/Resources/completions/alacritty.fish"
