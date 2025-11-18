@@ -1,4 +1,4 @@
-# Homebrew Tap for Alacritty (Custom)
+# Homebrew Tap for Alacritty
 
 This repository provides a **personal Homebrew tap** to install a custom build of Alacritty on macOS (Apple Silicon only).
 It tracks the latest official Alacritty [GitHub releases](https://github.com/alacritty/alacritty) and updates automatically via GitHub Actions.
@@ -12,7 +12,7 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
     brew tap ntrezowan/alacritty
     ```
 
-2. **Install Alacritty Custom:**
+2. **Install Alacritty:**
     ```sh
     brew install --cask alacritty-custom
     ```
@@ -23,12 +23,12 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
     brew upgrade --cask alacritty-custom
     ```
 
-4. **To remove Alacritty Custom:**
+4. **To remove Alacritty:**
     ```sh
     brew uninstall --cask alacritty-custom
     ```
 
-    **To remove Alacritty Custom and its configs (`~/.config/alacritty`):**
+    **To remove Alacritty and its configs (`~/.config/alacritty`):**
     ```sh
     brew uninstall --cask --zap alacritty-custom
     ```
@@ -52,5 +52,11 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
 - **Security:** This app is not codesigned/notarized. You must manually approve it in Gatekeeper.
 - **Auto-update:** GitHub Actions keeps this cask up to date weekly.
 - **No conflicts:** The unique cask name `alacritty-custom` ensures your installation won’t be overridden by the official Homebrew cask.
+    ```sh
+    brew info alacritty-custom
+    ==> alacritty-custom: 0.16.1
+    https://github.com/alacritty/alacritty
+    Installed
+    ```
 
 ---
