@@ -5,7 +5,6 @@
 This repository provides a **prebuilt Homebrew cask** for Alacritty. It is **not officially signed or notarized by Apple**. Users should verify the binary themselves before installation.
 
 If you discover a security issue in this tap, **please report it using GitHub's "Report a vulnerability" feature via the Security tab in this repository**.
-**Do not use public GitHub Issues for security-related reports.**
 
 ---
 
