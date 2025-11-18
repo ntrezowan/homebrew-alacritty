@@ -1,0 +1,70 @@
+name: Update Alacritty Cask
+
+on:
+  schedule:
+    - cron: "0 0 * * 1" # weekly, at 00:00 UTC every Monday
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Fetch latest release
+        id: release
+        run: |
+          VERSION=$(curl -s https://api.github.com/repos/alacritty/alacritty/releases/latest | jq -r '.tag_name' | sed 's/v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download DMG and compute SHA256
+        id: sha
+        run: |
+          curl -L -o alacritty.dmg "https://github.com/alacritty/alacritty/releases/download/v${{ steps.release.outputs.version }}/Alacritty-v${{ steps.release.outputs.version }}.dmg"
+          SHA256=$(sha256sum alacritty.dmg | awk '{print $1}')
+          echo "sha=$SHA256" >> $GITHUB_OUTPUT
+
+      - name: Update Cask file
+        run: |
+          ruby -pi -e 'sub(/version ".*"/, "version \"${{ steps.release.outputs.version }}\"")' casks/alacritty.rb
+          ruby -pi -e 'sub(/sha256 ".*"/, "sha256 \"${{ steps.sha.outputs.sha }}\"")' casks/alacritty.rb
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add casks/alacritty.rb
+          git commit -m "Update Alacritty to ${{ steps.release.outputs.version }}" || echo "No changes"
+
+      - name: Pull latest from remote
+        run: git pull --rebase
+
+      - name: Push changes
+        run: git push
+
+      - name: Create release tag (vX.Y.Z-tap)
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          if git tag | grep -qx "v$VERSION-tap"; then
+            echo "Tag v$VERSION-tap already exists."
+          else
+            git tag -a "v$VERSION-tap" -m "Cask for Alacritty $VERSION"
+            git push origin "v$VERSION-tap"
+            echo "Tagged and pushed v$VERSION-tap."
+          fi
+
+      - name: Create GitHub Release (pro move!)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          TAG="v$VERSION-tap"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release $TAG already exists."
+          else
+            gh release create "$TAG" --title "Alacritty $VERSION (tap auto-release)" --notes "Automated Homebrew cask release for Alacritty $VERSION."
+            echo "Created GitHub release $TAG"
+          fi
