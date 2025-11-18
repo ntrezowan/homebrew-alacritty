@@ -12,18 +12,23 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
     brew tap ntrezowan/alacritty
     ```
 
-2. **Install Alacritty:**
+    *use the following if Homebrew cannot resolve the default URL*
+   ```sh
+   brew tap ntrezowan/alacritty https://github.com/ntrezowan/alacritty
+   ```
+
+3. **Install Alacritty:**
     ```sh
     brew install --cask alacritty-custom
     ```
 
-3. **Upgrade:**
+4. **Upgrade:**
     ```sh
     brew update
     brew upgrade --cask alacritty-custom
     ```
 
-4. **To remove Alacritty:**
+5. **To remove Alacritty:**
     ```sh
     brew uninstall --cask alacritty-custom
     ```
@@ -33,7 +38,7 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
     brew uninstall --cask --zap alacritty-custom
     ```
 
-5. **To untap (remove the tap):**
+6. **To untap (remove the tap):**
     ```sh
     brew untap ntrezowan/alacritty
     ```
