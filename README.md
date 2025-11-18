@@ -54,9 +54,6 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
 - **No conflicts:** The unique cask name `alacritty-custom` ensures your installation won’t be overridden by the official Homebrew cask.
     ```sh
     brew info alacritty-custom
-    ==> alacritty-custom: 0.16.1
-    https://github.com/alacritty/alacritty
-    Installed
     ```
 
 ---
