@@ -44,7 +44,7 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
     ```
 ---
 
-### Notes
+## Notes
 
 - **Apple Silicon only.** (For Intel Macs, use the official cask or build from source.)
 - **First launch:** macOS will block the app (“unverified developer”). To allow launch:
