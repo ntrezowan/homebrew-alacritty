@@ -1,6 +1,6 @@
-# Homebrew Tap for Alacritty
+# Homebrew Tap for Alacritty (Custom)
 
-This repository provides a **personal Homebrew tap** to install Alacritty on macOS (Apple Silicon only).  
+This repository provides a **personal Homebrew tap** to install a custom build of Alacritty on macOS (Apple Silicon only).
 It tracks the latest official Alacritty [GitHub releases](https://github.com/alacritty/alacritty) and updates automatically via GitHub Actions.
 
 ---
@@ -9,34 +9,34 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
 
 1. **Add this tap (one time):**
     ```sh
-    brew tap ntrezowan/alacritty https://github.com/ntrezowan/alacritty
+    brew tap ntrezowan/alacritty
     ```
 
-2. **Install Alacritty:**
+2. **Install Alacritty Custom:**
     ```sh
-    brew install --cask alacritty-tap
+    brew install --cask alacritty-custom
     ```
 
 3. **Upgrade:**
     ```sh
     brew update
-    brew upgrade --cask alacritty-tap
-    ```
-4. To remove Alacritty
-    ```sh
-    brew uninstall --cask alacritty-tap
-    ```
-    
-    To remove Alacritty and its configs (`~/.config/alacritty`) 
-    ```sh
-    brew uninstall --cask alacritty-tap
+    brew upgrade --cask alacritty-custom
     ```
 
-5. To untap
+4. **To remove Alacritty Custom:**
+    ```sh
+    brew uninstall --cask alacritty-custom
+    ```
+
+    **To remove Alacritty Custom and its configs (`~/.config/alacritty`):**
+    ```sh
+    brew uninstall --cask --zap alacritty-custom
+    ```
+
+5. **To untap (remove the tap):**
     ```sh
     brew untap ntrezowan/alacritty
     ```
-
 ---
 
 ### Notes
@@ -51,6 +51,9 @@ It tracks the latest official Alacritty [GitHub releases](https://github.com/ala
     - Open Alacritty.app once, then go to System Settings → Security & Privacy → General and click “Open Anyway” for Alacritty.
 - **Security:** This app is not codesigned/notarized. You must manually approve it in Gatekeeper.
 - **Auto-update:** GitHub Actions keeps this cask up to date weekly.
-- **No conflicts:** The unique cask name `alacritty-tap` ensures your installation won’t be overridden by the official Homebrew cask.
+- **No conflicts:** The unique cask name `alacritty-custom` ensures your installation won’t be overridden by the official Homebrew cask.
 
 ---
+
+**Brutal reality:**  
+If you do not use exactly `alacritty-custom` in all your install/upgrade/uninstall instructions, users *will* get errors, and this README will be out of date. If you ever change the cask token, update every example here immediately.
